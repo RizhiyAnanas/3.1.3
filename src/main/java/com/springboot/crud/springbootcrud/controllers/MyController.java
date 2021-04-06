@@ -61,8 +61,8 @@ public class MyController {
     public String showList(Model model, Principal principal){
         User user =(User) userService.loadUserByUsername(principal.getName());
         model.addAttribute("thisUser", user);
-        List<User> list = service.getList();
-        model.addAttribute("users", list);
+        model.addAttribute("user", new User());
+        model.addAttribute("users", service.getList());
         model.addAttribute("allRoles", roleService.getAllRoles());
         return "users";
     }
