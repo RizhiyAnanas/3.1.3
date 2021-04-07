@@ -26,37 +26,6 @@ public class MyController {
         this.roleService = roleService;
         this.userService = userService;
     }
-
-    @GetMapping("/new")
-    public String createNewUser(Model model,Principal principal){
-        User user =(User) userService.loadUserByUsername(principal.getName());
-        model.addAttribute("thisUser", user);
-        model.addAttribute("user", new User());
-        model.addAttribute("allRoles", roleService.getAllRoles());
-        return "new";
-    }
-
-
-    @PostMapping()
-    public String create(@ModelAttribute("user") User user, @RequestParam("role") String role){
-        Set<Role> roles = new HashSet<>();
-        if (role.equals("ROLE_ADMIN")){
-                roles.add(roleService.getAllRoles().get(0));
-        }else{
-            roles.add(roleService.getAllRoles().get(1));
-        }
-        user.setRoles(roles);
-        service.add(user);
-        return "redirect:/admin";
-    }
-
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") Long id, Model model){
-        model.addAttribute("user", service.show(id));
-        return "show";
-    }
-
-
     @GetMapping
     public String showList(Model model, Principal principal){
         User user =(User) userService.loadUserByUsername(principal.getName());
@@ -65,29 +34,5 @@ public class MyController {
         model.addAttribute("users", service.getList());
         model.addAttribute("allRoles", roleService.getAllRoles());
         return "users";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") Long id, Model model){
-        model.addAttribute("user", service.show(id));
-        return "edit";
-    }
-
-    @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable("id") Long id){
-        service.deleteUser(id);
-        return "redirect:/admin";
-    }
-    @PostMapping("/{id}")
-    public String update(@ModelAttribute("user") User user,@PathVariable("id") Long id, @RequestParam("role") String role ){
-        Set<Role> roles = new HashSet<>();
-        if (role.equals("ROLE_ADMIN")){
-            roles.add(roleService.getAllRoles().get(0));
-        }else{
-            roles.add(roleService.getAllRoles().get(1));
-        }
-        user.setRoles(roles);
-        service.update(user, id);
-        return "redirect:/admin";
     }
 }
